@@ -10,7 +10,7 @@ from rclpy.executors import MultiThreadedExecutor
 from rclpy.executors import SingleThreadedExecutor
 from ros2_ws.py_pubsub.py_pubsub.publisher_member_function import MinimalPublisher
 from ros2_ws.py_pubsub.py_pubsub.subscriber_member_function import MinimalSubscriber
-import ros_communicate
+#from ros2_comunication import *
 app=Flask(__name__)
 app.config.from_object(DevConfig)
 
@@ -53,7 +53,7 @@ class RecipesResource(Resource):
         """Send request to robot"""
         global operation
         operation = request.get_json()
-        ros_communicate.create_thread_pulisher(operation)
+        create_publisher(operation)
         return "sucessful",201
     
 # @api.route('/recipe/<int:id>')
@@ -89,20 +89,31 @@ class RecipesResource(Resource):
 #         }
 
     
-def create_subcriber(executor_sudcribe):
+#def create_subcriber(executor_sudcribe):
     
     #subcribe_node=MinimalSubscriber()
     #rclpy.spin(subcribe_node)
-    executor_sudcribe.spin()
+    #executor_sudcribe.spin()
+    
+
+def create_publisher(operation):
+    global publish_node
+    if publish_node is None:
+        publish_node = MinimalPublisher(operation)
+    else:
+        publish_node.direction = operation
+        publish_node.sending_request()
 
     
 
 if __name__=='__main__':
     rclpy.init()
-    subcribe_node=MinimalSubscriber()
-    executor_subcribe=SingleThreadedExecutor()
-    executor_subcribe.add_node(subcribe_node)
-    t1=threading.Thread(target=create_subcriber,args=(executor_subcribe,))
-    t1.start()
+    global publish_node
+    publish_node = None
+    #subcribe_node=MinimalSubscriber()
+    #executor_subcribe=SingleThreadedExecutor()
+    #executor_subcribe.add_node(subcribe_node)
+    #t1=threading.Thread(target=create_subcriber,args=(executor_subcribe,))
+    #t1.start()
     app.run()
     rclpy.shutdown()
