@@ -1,4 +1,4 @@
-import "./customBlocks/custom_Blocks";
+import "./custom_Blocks";
 import Blockly from "blockly";
 import { pythonGenerator } from "blockly/python"
 import { BlocklyWorkspace } from "react-blockly";
