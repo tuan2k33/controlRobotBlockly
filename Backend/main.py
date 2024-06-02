@@ -1,6 +1,5 @@
 from flask import Flask, request
 from flask_restx import Api, Resource, fields
-from flask_cors import CORS
 from config import DevConfig
 from models import Recipe
 from exts import db
@@ -13,7 +12,6 @@ from ros2_ws.py_pubsub.py_pubsub.publisher_member_function import MinimalPublish
 from ros2_ws.py_pubsub.py_pubsub.subscriber_member_function import MinimalSubscriber
 #from ros2_comunication import *
 app=Flask(__name__)
-CORS(app)
 app.config.from_object(DevConfig)
 
 db.init_app(app)
@@ -34,18 +32,6 @@ recipe_model=api.model(
     }
 )
 
-@app.route('/api/run-code', methods=['POST'])
-def run_code():
-    data = request.json
-    code = data.get('code')
-
-    try:
-        # Thực thi mã Python an toàn
-        exec_globals = {}
-        exec(code, exec_globals)
-        return jsonify({'result': exec_globals.get('result')})
-    except Exception as e:
-        return jsonify({'error': str(e)}), 400
 
 
 @api.route('/hello')
