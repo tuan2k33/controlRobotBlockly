@@ -630,7 +630,6 @@ class BlocklyComponent extends PureComponent {
             }
           }}
           onXmlChange={this.handleXmlChange}
-          onWorkspaceChange={this.handleWorkspaceChange}
         />
         <button onClick={this.handleGenerateJSCode} >Generate Python Code</button>
         <pre>{this.state.response}</pre>
