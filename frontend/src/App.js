@@ -601,7 +601,7 @@ class BlocklyComponent extends PureComponent {
   };
   
   sendRequest = (pythonCode) => {
-    axios.post('http://localhost:5000/sendingRequest', { operation: pythonCode })
+    axios.post('http://127.0.0.1:5000/docs/sendingRequest', { operation: pythonCode })
       .then(response => {
         this.setState({ response: response.data.message });
       })
