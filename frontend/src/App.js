@@ -570,33 +570,7 @@ const toolbox = {
   ]
 };
 
-function sendDataToBackend(data) {
 
-    //chuyển đổi dữ liệu thành JSON
-    const jsonData = JSON.stringify(data);
-    
-    // Tạo một yêu cầu Fetch
-    fetch('sqlalchemy.url' , { //thay url backend vào
-      method: 'POST' ,
-      headers: {
-       'Content-Type': 'application/json'
-      },
-      body: jsonData
-    })
-    .then(response => {
-     if(!response.ok) {
-      throw new Error('Network response was not ok');
-     }
-     return response.json(); // Phân tích phản hồi JSON nếu cần
-    })
-    .then(data => {
-     console.log('Data sent successfully:', data);
-     //Xử lý phản hồi từ backend (nếu cần)
-     })
-     .catch(error => {
-       console.error('There was a problem with your fetch operation:', error);
-     });  
-}
 
 class BlocklyComponent extends PureComponent {
   constructor(props) {
@@ -608,17 +582,21 @@ class BlocklyComponent extends PureComponent {
   }
 
   handleGenerateJSCode = () => {
-    //const jsCode = javascriptGenerator.workspaceToCode();
     const pythonCode = pythonGenerator.workspaceToCode();
-    
-    this.setState({ pythonCode });
-    
-    sendDataToBackend(pythonCode);
-    
-    
+    this.setState({ pythonCode });  
     console.log(pythonCode);
     console.log(this.state.xml);
-    
+
+    const runCode = () => {
+        axios.post('http://localhost:5000/api/run-code', { code })
+            .then(response => {
+                setResult(response.data.result || response.data.error);
+            })
+            .catch(error => {
+                console.error('Error running code:', error);
+                setResult('Error running code');
+            });
+    };
     
   };
 
@@ -627,11 +605,12 @@ class BlocklyComponent extends PureComponent {
   };
 
   handleWorkspaceChange = (workspace) => {
-    //const jsCode = Blockly.JavaScript.workspaceToCode(workspace);
     const pythonCode = Blockly.Python.workspaceToCode(workspace);
     this.state({ pythonCode });
   };
-
+  
+  
+  
   render() {
     return (
       <div className="container">
@@ -652,6 +631,7 @@ class BlocklyComponent extends PureComponent {
           onXmlChange={this.handleXmlChange}
         />
         <button onClick={this.handleGenerateJSCode} >Generate Python Code</button>
+        <pre>{result}</pre>
         <div>{this.state.pythonCode}</div>
         
       </div>
