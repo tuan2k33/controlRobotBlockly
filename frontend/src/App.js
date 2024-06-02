@@ -4,6 +4,7 @@ import { pythonGenerator } from "blockly/python"
 import { BlocklyWorkspace } from "react-blockly";
 import { PureComponent } from "react";
 import React, { useState } from "react";
+import axios from 'axios';
 import "./App.css";
 
 const initialXml = '<xml xmlns="http://www.w3.org/1999/xhtml"></xml>';
