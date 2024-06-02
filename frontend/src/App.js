@@ -583,21 +583,12 @@ class BlocklyComponent extends PureComponent {
 
   handleGenerateJSCode = () => {
     const pythonCode = pythonGenerator.workspaceToCode();
-    this.setState({ pythonCode });  
-    console.log(pythonCode);
-    console.log(this.state.xml);
+    this.setState({ pythonCode }, () => {
+      console.log(pythonCode);
+      console.log(this.state.xml);
 
-    const runCode = () => {
-        axios.post('http://localhost:5000/api/run-code', { code })
-            .then(response => {
-                setResult(response.data.result || response.data.error);
-            })
-            .catch(error => {
-                console.error('Error running code:', error);
-                setResult('Error running code');
-            });
-    };
-    
+      this.sendRequest(pythonCode);
+    });
   };
 
   handleXmlChange = (xml) => {
@@ -609,7 +600,16 @@ class BlocklyComponent extends PureComponent {
     this.state({ pythonCode });
   };
   
-  
+  sendRequest = (pythonCode) => {
+    axios.post('http://localhost:5000/sendingRequest', { operation: pythonCode })
+      .then(response => {
+        this.setState({ response: response.data.message });
+      })
+      .catch(error => {
+        console.error('Error sending request:', error);
+        this.setState({ response: 'Error sending request' });
+      });
+  };
   
   render() {
     return (
@@ -629,9 +629,10 @@ class BlocklyComponent extends PureComponent {
             }
           }}
           onXmlChange={this.handleXmlChange}
+          onWorkspaceChange={this.handleWorkspaceChange}
         />
         <button onClick={this.handleGenerateJSCode} >Generate Python Code</button>
-        <pre>{result}</pre>
+        <pre>{this.state.response}</pre>
         <div>{this.state.pythonCode}</div>
         
       </div>
