@@ -42,6 +42,15 @@ class HelloResource(Resource):
 
 
 
+def create_publisher(operation):
+    global publish_node
+    if publish_node is None:
+        publish_node = MinimalPublisher(operation)
+    else:
+        publish_node.direction = operation
+        publish_node.sending_request()
+
+ 
 @api.route('/sendingRequest') 
 class RecipesResource(Resource):
     # @api.marshal_list_with(recipe_model)
@@ -57,6 +66,10 @@ class RecipesResource(Resource):
         operation = request.get_json()
         create_publisher(operation)
         return "sucessful",201
+
+
+
+
     
 # @api.route('/recipe/<int:id>')
 # class RecipeResource(Resource):
@@ -97,16 +110,7 @@ class RecipesResource(Resource):
     #rclpy.spin(subcribe_node)
     #executor_sudcribe.spin()
     
-
-def create_publisher(operation):
-    global publish_node
-    if publish_node is None:
-        publish_node = MinimalPublisher(operation)
-    else:
-        publish_node.direction = operation
-        publish_node.sending_request()
-
-    
+   
 
 if __name__=='__main__':
     rclpy.init()
