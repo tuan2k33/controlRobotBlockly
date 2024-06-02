@@ -32,6 +32,20 @@ recipe_model=api.model(
     }
 )
 
+@app.route('/api/run-code', methods=['POST'])
+def run_code():
+    data = request.json
+    code = data.get('code')
+
+    try:
+        # Thực thi mã Python an toàn
+        exec_globals = {}
+        exec(code, exec_globals)
+        return jsonify({'result': exec_globals.get('result')})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 400
+
+
 @api.route('/hello')
 class HelloResource(Resource):
     def get(self):
