@@ -38,7 +38,7 @@ pythonGenerator.forBlock["move"] = function (block, generator) {
   var value_time = block.getFieldValue('time_value');
   var value_direction = block.getFieldValue('direction_value');
   var value_distance = block.getFieldValue('distance_value');
-  var code = '"move": "direction": ' + value_direction + ', "distance": ' + value_distance + ', "time": ' + value_time + '\n';
+  var code = '"move": "direction": "' + value_direction + '", "distance": ' + value_distance + ', "time": ' + value_time + '\n';
   return code;
 };
 pythonGenerator.forBlock["rotate"] = function (block, generator) {
