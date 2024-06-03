@@ -48,17 +48,17 @@ class MinimalPublisher(Node):
         
         if self.direction.get('move') is not None:
             direction_value = self.direction['move']['direction']
-       	    distance_value = float(self.direction['move']['distance'])
-            time_value = float(self.direction['move']['time'])
+            distance_value = float(self.direction['move']['distance'])
+            #time_value = float(self.direction['move']['time'])
             msg.linear.x=float(moveBindings[direction_value][0] * distance_value)
             msg.angular.z=float(moveBindings[direction_value][3] * distance_value)
 
         self.publisher_.publish(msg)
         self.get_logger().info('Publishing: "%s"' % msg)
-        time.sleep(1)
+        time.sleep(2)
 	
-        self.publisher_.publish(stop_msg)
-        self.get_logger().info('Publishing stop: "%s"' % stop_msg)
+        # self.publisher_.publish(stop_msg)
+        # self.get_logger().info('Publishing stop: "%s"' % stop_msg)
         #self.destroy_node()
         #self.flag= not (self.flag)
         
@@ -69,8 +69,8 @@ def main(args=None):
     rclpy.init(args=args)
     minimal_publisher = MinimalPublisher()
     rclpy.spin(minimal_publisher)  
-    minimal_publisher.destroy_node()
-    rclpy.shutdown()
+    #minimal_publisher.destroy_node()
+    #rclpy.shutdown()
 
 if __name__ == '__main__':
 
