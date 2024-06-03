@@ -553,21 +553,21 @@ const toolbox = {
         
       ]
     },
-    {
-      kind: "sep"
-    }, 
-    { 
-      kind: "category",
-      name: "Rotate",
-      colour: "#39A1A3",
-      contents: [
-        {
-          kind: "block",
-          type: "rotate"
-        },
+    // {
+    //   kind: "sep"
+    // }, 
+    // { 
+    //   kind: "category",
+    //   name: "Rotate",
+    //   colour: "#39A1A3",
+    //   contents: [
+    //     {
+    //       kind: "block",
+    //       type: "rotate"
+    //     },
         
-      ]
-    },
+    //   ]
+    // },
   ]
 };
 
@@ -587,8 +587,13 @@ class BlocklyComponent extends PureComponent {
     this.setState({ pythonCode }, () => {
       console.log(pythonCode);
       console.log(this.state.xml);
-
-      this.sendRequest(pythonCode);
+      const listObj=pythonCode.split(" ");
+      console.log("list: ",listObj);
+      for(let ele=1;ele<listObj.length;ele++) {
+        console.log("ele: ",listObj[ele]);
+        this.sendRequest(JSON.parse(listObj[ele]));
+      }
+      //console.log("test: ", JSON.parse(pythonCode));
     });
   };
 
@@ -602,7 +607,8 @@ class BlocklyComponent extends PureComponent {
   };
   
   sendRequest = (pythonCode) => {
-    axios.post('http://127.0.0.1:5000/docs/sendingRequest', { operation: pythonCode })
+    //console.log("test request: ", pythonCode)
+    axios.post('http://127.0.0.1:5000/sendingRequest',  pythonCode )
       .then(response => {
         this.setState({ response: response.data.message });
       })
@@ -631,7 +637,7 @@ class BlocklyComponent extends PureComponent {
           }}
           onXmlChange={this.handleXmlChange}
         />
-        <button onClick={this.handleGenerateJSCode} >Generate Python Code</button>
+        <button onClick={this.handleGenerateJSCode} >Generate JSON Code</button>
         <pre>{this.state.response}</pre>
         <div>{this.state.pythonCode}</div>
         

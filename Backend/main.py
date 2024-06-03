@@ -10,15 +10,17 @@ from rclpy.executors import MultiThreadedExecutor
 from rclpy.executors import SingleThreadedExecutor
 from ros2_ws.py_pubsub.py_pubsub.publisher_member_function import MinimalPublisher
 from ros2_ws.py_pubsub.py_pubsub.subscriber_member_function import MinimalSubscriber
+from flask_cors import CORS
 #from ros2_comunication import *
 app=Flask(__name__)
+CORS(app)
 app.config.from_object(DevConfig)
 
 db.init_app(app)
 
 migrate=Migrate(app,db)
 
-api=Api(app,doc='/docs')
+api=Api(app,doc='/')
 
 #operation for robot
 operation={}
@@ -64,6 +66,7 @@ class RecipesResource(Resource):
         """Send request to robot"""
         global operation
         operation = request.get_json()
+        #print("operation: ",operation)
         create_publisher(operation)
         return "sucessful",201
 
