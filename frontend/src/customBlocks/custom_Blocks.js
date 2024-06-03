@@ -38,11 +38,11 @@ pythonGenerator.forBlock["move"] = function (block, generator) {
   var value_time = block.getFieldValue('time_value');
   var value_direction = block.getFieldValue('direction_value');
   var value_distance = block.getFieldValue('distance_value');
-  var code = 'robot.move( Direction: ' + value_direction + ', Distance: ' + value_distance + ', Time: ' + value_time + ');\n';
+  var code = '"move": "direction": ' + value_direction + ', "distance": ' + value_distance + ', "time": ' + value_time + '\n';
   return code;
 };
 pythonGenerator.forBlock["rotate"] = function (block, generator) {
   var value_angle = block.getFieldValue('angle_value');
-  var code = 'robot.rotate( Angel: ' + value_angle + ');\n';
+  var code = '"rotate": ' + value_angle + '\n';
   return code;
 };
