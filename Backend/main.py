@@ -48,6 +48,7 @@ def create_publisher(operation):
     global publish_node
     if publish_node is None:
         publish_node = MinimalPublisher(operation)
+        rclpy.spin(publish_node)
     else:
         publish_node.direction = operation
         publish_node.sending_request()
